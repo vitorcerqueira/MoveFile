@@ -11,6 +11,7 @@ namespace FileMoverApp
     public partial class Form1 : Form
     {
         private const string ConfigFilePath = "Config.xml";
+        private double requiredSpaceInMB = 0;
 
         public Form1()
         {
@@ -170,6 +171,8 @@ namespace FileMoverApp
 
                 Boolean achouPathOk = false;
 
+                string subAux = "";
+
                 int totPath = textBox1.Text.Where(char.IsDigit).Any() ? int.Parse(textBox1.Text) : 0;
 
                 if (totPath > 0)
@@ -178,203 +181,123 @@ namespace FileMoverApp
                     {
                         foreach (string pathSource in pathsSource)
                         {
-                            string[] pathsSource2 = Directory.GetDirectories(pathSource);
-
-                            if (pathsSource2.Length > 0)
+                            if (totPath < 0)
                             {
-                                foreach (string pathSource2 in pathsSource2)
+                                break;
+                            }
+
+                            string[] pathFileSource =
+                                Directory.GetFiles(pathSource, "*.*", SearchOption.AllDirectories);
+
+                            Array.Sort(pathFileSource);
+
+                            if (pathFileSource.Length > 0)
+                            {
+                                foreach (string pathFile in pathFileSource)
                                 {
-                                    string[] pathsSource3 = Directory.GetDirectories(pathSource2);
-
-                                    if (pathsSource3.Length > 0)
+                                    if (totPath < 0)
                                     {
-                                        foreach (string pathSource3 in pathsSource3)
+                                        break;
+                                    }
+
+                                    string[] pathFilePart = pathFile.Split('\\');
+
+                                    for (int i = 0; i < pathFilePart.Length; i++)
+                                    {
+                                        string ano = "";
+                                        string sub = "";
+                                        
+                                        string subInternal = "";
+                                        string km = "";
+                                        string fileName = pathFilePart[pathFilePart.Length - 1];
+
+                                        if (totPath < 0)
                                         {
-                                            if (totPath > 0)
+                                            break;
+                                        }
+
+                                        if (DateTime.TryParseExact(pathFilePart[i], "yyyy", null,
+                                                System.Globalization.DateTimeStyles.None, out DateTime _))
+                                        {
+                                            achouPathOk = true;
+
+                                            ano = pathFilePart[i];
+
+                                            int posSub = 0;
+
+                                            for (int j = i + 1; j < pathFilePart.Length - 1; j++)
                                             {
-                                                string[] partesDoCaminho = pathSource3.Split('\\');
-
-                                                string pathMatch = "";
-
-                                                int sizeLastPath = -1;
-
-                                                foreach (var path in partesDoCaminho)
+                                                if (string.IsNullOrEmpty(sub) && pathFilePart[j].ToLower()
+                                                        .StartsWith("sub", StringComparison.CurrentCultureIgnoreCase))
                                                 {
-                                                    sizeLastPath++;
+                                                    posSub = j;
 
-                                                    pathMatch += path;
+                                                    sub = pathFilePart[j];
 
-                                                    if (pathMatch.Replace("\\", "") ==
-                                                        txtSourceFolder.Text.Replace("\\", ""))
+                                                    string numericPart = new string(sub.Where(char.IsDigit).ToArray());
+
+                                                    int number;
+
+                                                    if (int.TryParse(numericPart, out number))
                                                     {
-                                                        break;
+                                                        string formattedSub = $"Sub {number:00}";
+
+                                                        sub = formattedSub;
                                                     }
                                                 }
 
-                                                string ano = partesDoCaminho.ElementAtOrDefault(sizeLastPath + 1);
-
-                                                string sub = partesDoCaminho.ElementAtOrDefault(sizeLastPath + 2);
-
-                                                if (ano != null && sub != null)
+                                                if (string.IsNullOrEmpty(km) && pathFilePart[j].ToLower()
+                                                        .StartsWith("km", StringComparison.CurrentCultureIgnoreCase))
                                                 {
-                                                    if (ano.Where(char.IsDigit).Any() && sub.ToLower().Contains("sub"))
-                                                    {
-                                                        achouPathOk = true;
-
-                                                        string[] pathFilesSoure = Directory.GetFiles(pathSource3, "*.*",
-                                                                SearchOption.AllDirectories)
-                                                            .Where(pathSource3 => !IsFileHidden(pathSource3))
-                                                            .ToArray();
-
-                                                        if (pathFilesSoure.Length > 0)
-                                                        {
-                                                            string numericPart =
-                                                                new string(sub.Where(char.IsDigit).ToArray());
-
-                                                            int number;
-
-                                                            if (int.TryParse(numericPart, out number))
-                                                            {
-                                                                string formattedSub = $"Sub {number:00}";
-
-                                                                sub = formattedSub;
-
-                                                                Console.WriteLine("Variável formatada: " +
-                                                                    formattedSub);
-
-                                                                string km = partesDoCaminho
-                                                                    .ElementAtOrDefault(sizeLastPath + 3);
-
-                                                                totPath--;
-
-                                                                foreach (string pathFileSoure in pathFilesSoure)
-                                                                {
-                                                                    string tamanhoFileSource = Math.Round(
-                                                                            new FileInfo(pathFileSoure).Length /
-                                                                            (double)(1024 * 1024),
-                                                                            2) +
-                                                                        " MB";
-
-                                                                    int index = pathFileSoure.IndexOf(km);
-
-                                                                    string fileSource = pathFileSoure
-                                                                        .Substring(index + km.Length);
-
-                                                                    string pathDestinationVerify =
-                                                                        txtDestinationFolder.Text + "\\" + sub + "\\" +
-                                                                        km +
-                                                                        "\\" +
-                                                                        ano;
-
-                                                                    string[] fileSourceSplit = fileSource.Split("\\");
-                                                                    string aux = "";
-
-                                                                    if (fileSourceSplit[1] == ano)
-                                                                    {
-                                                                        foreach (var path in fileSourceSplit)
-                                                                        {
-                                                                            if (!string.IsNullOrEmpty(path) && !(path == ano))
-                                                                            {
-                                                                                aux += (string.IsNullOrEmpty(aux) ? "" : "\\") + path;
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    string fileDestinationFinaly = pathDestinationVerify + "\\" + aux;
-
-                                                                    //Thread.Sleep(2000);
-
-                                                                    if (Directory.Exists(pathDestinationVerify))
-                                                                    {
-                                                                        string[] filesDestination = Directory
-                                                                            .GetFiles(pathDestinationVerify, "*.*",
-                                                                                SearchOption.AllDirectories)
-                                                                            .Where(pathDestinationVerify =>
-                                                                                !IsFileHidden(pathDestinationVerify))
-                                                                            .ToArray();
-
-                                                                        if (filesDestination.Contains(
-                                                                                fileDestinationFinaly))
-                                                                        {
-                                                                            if (radioButton1.Checked ||
-                                                                                radioButton3.Checked)
-                                                                            {
-                                                                                dataGridView.Rows.Add(pathFileSoure,
-                                                                                    fileDestinationFinaly,
-                                                                                    tamanhoFileSource);
-
-                                                                                DataGridViewRow row =
-                                                                                    dataGridView.Rows[
-                                                                                        dataGridView.Rows.Count - 1];
-
-                                                                                row.DefaultCellStyle.BackColor =
-                                                                                    File.Exists(fileDestinationFinaly)
-                                                                                        ? Color.Green
-                                                                                        : Color.Tomato;
-
-                                                                                achou = true;
-
-                                                                            }
-                                                                        }
-                                                                        else
-                                                                        {
-                                                                            if (radioButton1.Checked ||
-                                                                                radioButton2.Checked)
-                                                                            {
-                                                                                dataGridView.Rows.Add(pathFileSoure,
-                                                                                    fileDestinationFinaly,
-                                                                                    tamanhoFileSource);
-
-                                                                                DataGridViewRow row =
-                                                                                    dataGridView.Rows[
-                                                                                        dataGridView.Rows.Count - 1];
-
-                                                                                row.DefaultCellStyle.BackColor =
-                                                                                    Color.Tomato;
-
-                                                                                achou = true;
-                                                                            }
-                                                                        }
-                                                                    }
-                                                                    else
-                                                                    {
-                                                                        if (!radioButton3.Checked)
-                                                                        {
-                                                                            dataGridView.Rows.Add(pathFileSoure,
-                                                                                fileDestinationFinaly,
-                                                                                tamanhoFileSource);
-
-                                                                            DataGridViewRow row =
-                                                                                dataGridView.Rows[
-                                                                                    dataGridView.Rows.Count - 1];
-
-                                                                            row.DefaultCellStyle.BackColor =
-                                                                                Color.Tomato;
-
-                                                                            achou = true;
-
-                                                                        }
-                                                                    }
-                                                                }
-                                                            }
-                                                            else
-                                                            {
-                                                                Console.WriteLine(
-                                                                    "A variável 'sub' não contém uma parte numérica válida.");
-                                                            }
-                                                        }
-                                                        else
-                                                        {
-                                                            //MessageBox.Show("Não encontrado arquivos em -> " + pathSource3);
-                                                        }
-                                                    }
+                                                    km = pathFilePart[j];
                                                 }
                                             }
+
+                                            for (int j = posSub + 1; j < pathFilePart.Length - 1; j++)
+                                            {
+                                                if (!pathFilePart[j].StartsWith("km", StringComparison.CurrentCultureIgnoreCase))
+                                                {
+                                                    subInternal += "\\" + pathFilePart[j];
+                                                }
+                                            }
+
+                                            string fileNameDestination = txtDestinationFolder.Text + "\\" + ano + "\\" +
+                                                                         sub +"\\" + km + subInternal + "\\" +
+                                                                         fileName;
+
+                                            requiredSpaceInMB += new FileInfo(pathFile).Length / (double)(1024 * 1024);
+
+                                            string tamanhoFileSource = Math.Round(requiredSpaceInMB, 2) + " MB";
+
+                                            achou = File.Exists(fileNameDestination);
+
+                                            if ( (radioButton1.Checked) || (!achou && radioButton2.Checked) || (achou && radioButton3.Checked) )
+                                            {
+                                                if (sub != subAux)
+                                                {
+                                                    subAux = sub;
+
+                                                    totPath--;
+                                                }
+
+                                                if (totPath < 0)
+                                                {
+                                                    break;
+                                                }
+
+                                                dataGridView.Rows.Add(pathFile,
+                                                    fileNameDestination,
+                                                    tamanhoFileSource);
+
+                                                DataGridViewRow row =
+                                                    dataGridView.Rows[
+                                                        dataGridView.Rows.Count - 1];
+
+                                                row.DefaultCellStyle.BackColor = achou
+                                                    ? Color.Green
+                                                    : Color.Tomato;
+                                            }
                                         }
-                                    }
-                                    else
-                                    {
-                                        //MessageBox.Show("Não encontrado subpasta em -> " + pathSource2);
                                     }
                                 }
                             }
@@ -389,16 +312,16 @@ namespace FileMoverApp
                         //MessageBox.Show("Não encontrado subpasta em -> " + txtSourceFolder.Text);
                     }
 
-                    if (achouPathOk && !achou)
-                    {
-                        MessageBox.Show("Não foi encontrado arquivos!", "Atenção", MessageBoxButtons.OK,
-                            MessageBoxIcon.Exclamation);
-                    }
-                    else if (!achouPathOk)
-                    {
-                        MessageBox.Show("Não foi encontrado pastas com a escrutura -> .../ano/sub[n]/km", "Atenção",
-                            MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                    }
+                    //if (achouPathOk && !achou)
+                    //{
+                    //    MessageBox.Show("Não foi encontrado arquivos!", "Atenção", MessageBoxButtons.OK,
+                    //        MessageBoxIcon.Exclamation);
+                    //}
+                    //else if (!achouPathOk)
+                    //{
+                    //    MessageBox.Show("Não foi encontrado pastas com a escrutura -> .../ano/sub[n]/km", "Atenção",
+                    //        MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    //}
                 }
                 else
                 {
@@ -410,60 +333,71 @@ namespace FileMoverApp
 
         private void CopyFiles()
         {
-            Invoke(new Action(() =>
+            DriveInfo drive = new DriveInfo(Path.GetPathRoot(Path.GetPathRoot(txtDestinationFolder.Text)));
+
+            double availableFreeSpace = drive.AvailableFreeSpace / (1024.0 * 1024.0);
+
+            if (availableFreeSpace >= requiredSpaceInMB)
             {
-                progressBar.Maximum = dataGridView.Rows.Count;
-                progressBar.Value = 0;
-
-                Boolean achou = false;
-
-                foreach (DataGridViewRow row in dataGridView.Rows)
+                Invoke(new Action(() =>
                 {
-                    string sourceFile = row.Cells[0].Value.ToString();
-                    string destFile = row.Cells[1].Value.ToString();
+                    progressBar.Maximum = dataGridView.Rows.Count;
+                    progressBar.Value = 0;
 
-                    if (!File.Exists(destFile))
+                    Boolean achou = false;
+
+                    foreach (DataGridViewRow row in dataGridView.Rows)
                     {
-                        try
-                        {
-                            string destinationDir = Path.GetDirectoryName(destFile);
+                        string sourceFile = row.Cells[0].Value.ToString();
+                        string destFile = row.Cells[1].Value.ToString();
 
-                            if (!Directory.Exists(destinationDir))
+                        if (!File.Exists(destFile))
+                        {
+                            try
                             {
-                                Directory.CreateDirectory(destinationDir);
+                                string destinationDir = Path.GetDirectoryName(destFile);
+
+                                if (!Directory.Exists(destinationDir))
+                                {
+                                    Directory.CreateDirectory(destinationDir);
+                                }
+
+                                File.Copy(sourceFile, destFile, true);
+
+                                achou = true;
+
+                                //Thread.Sleep(1000);
                             }
-
-                            File.Copy(sourceFile, destFile, true);
-
-                            achou = true;
-
-                            //Thread.Sleep(1000);
+                            catch (Exception ex)
+                            {
+                                MessageBox.Show($"Error copy file {sourceFile}: {ex.Message}", "Atenção",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+                            }
                         }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show($"Error copy file {sourceFile}: {ex.Message}", "Atenção",
-                                MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
+
+                        //progressBar.Value++;
+
+                        progressBar.Invoke(new Action(() => progressBar.Value++));
                     }
 
-                    //progressBar.Value++;
-
-                    progressBar.Invoke(new Action(() => progressBar.Value++));
-                }
-
-                if (achou)
-                {
-                    MessageBox.Show("Arquivos movidos com sucesso!", "Atenção", MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation);
-                }
-                else
-                {
-                    MessageBox.Show("Não foi encontrado arquivos para copiar!", "Atenção", MessageBoxButtons.OK,
-                        MessageBoxIcon.Exclamation);
-                }
-            }));
+                    if (achou)
+                    {
+                        MessageBox.Show("Arquivos movidos com sucesso!", "Atenção", MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Não foi encontrado arquivos para copiar!", "Atenção", MessageBoxButtons.OK,
+                            MessageBoxIcon.Exclamation);
+                    }
+                }));
+            }
+            else
+            {
+                MessageBox.Show("Não há espaço suficiente disponível! Requerido: " + requiredSpaceInMB.ToString() + " MB Livre: " + availableFreeSpace.ToString() + " MB", "Atenção", MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+            }
         }
-
         private bool IsFileHidden(string filePath)
         {
             FileAttributes attributes = File.GetAttributes(filePath);
