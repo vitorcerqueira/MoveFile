@@ -201,16 +201,16 @@ namespace FileMoverApp
                                     }
 
                                     string[] pathFilePart = pathFile.Split('\\');
+                                    
+                                    string ano = "";
+                                    string sub = "";
+
+                                    string subInternal = "";
+                                    string km = "";
+                                    string fileName = pathFilePart[pathFilePart.Length - 1];
 
                                     for (int i = 0; i < pathFilePart.Length; i++)
                                     {
-                                        string ano = "";
-                                        string sub = "";
-                                        
-                                        string subInternal = "";
-                                        string km = "";
-                                        string fileName = pathFilePart[pathFilePart.Length - 1];
-
                                         if (totPath < 0)
                                         {
                                             break;
@@ -250,6 +250,8 @@ namespace FileMoverApp
                                                         .StartsWith("km", StringComparison.CurrentCultureIgnoreCase))
                                                 {
                                                     km = pathFilePart[j];
+
+                                                    break;
                                                 }
                                             }
 
@@ -261,8 +263,8 @@ namespace FileMoverApp
                                                 }
                                             }
 
-                                            string fileNameDestination = txtDestinationFolder.Text + "\\" + ano + "\\" +
-                                                                         sub +"\\" + km + subInternal + "\\" +
+                                            string fileNameDestination = txtDestinationFolder.Text + "\\" + sub + "\\" +
+                                                                         km +"\\" + ano + "\\Inspeções" + subInternal + "\\" +
                                                                          fileName;
 
                                             requiredSpaceInMB += new FileInfo(pathFile).Length / (double)(1024 * 1024);
@@ -296,6 +298,8 @@ namespace FileMoverApp
                                                 row.DefaultCellStyle.BackColor = achou
                                                     ? Color.Green
                                                     : Color.Tomato;
+
+                                                break;
                                             }
                                         }
                                     }
