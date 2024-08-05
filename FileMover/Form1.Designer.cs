@@ -42,6 +42,8 @@
             radioButton3 = new System.Windows.Forms.RadioButton();
             radioButton2 = new System.Windows.Forms.RadioButton();
             radioButton1 = new System.Windows.Forms.RadioButton();
+            textBox2 = new System.Windows.Forms.TextBox();
+            label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -49,7 +51,7 @@
             // btnSelectSource
             // 
             btnSelectSource.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnSelectSource.Location = new System.Drawing.Point(1057, 14);
+            btnSelectSource.Location = new System.Drawing.Point(925, 14);
             btnSelectSource.Name = "btnSelectSource";
             btnSelectSource.Size = new System.Drawing.Size(160, 31);
             btnSelectSource.TabIndex = 0;
@@ -60,7 +62,7 @@
             // btnSelectDestination
             // 
             btnSelectDestination.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnSelectDestination.Location = new System.Drawing.Point(1057, 51);
+            btnSelectDestination.Location = new System.Drawing.Point(925, 50);
             btnSelectDestination.Name = "btnSelectDestination";
             btnSelectDestination.Size = new System.Drawing.Size(160, 32);
             btnSelectDestination.TabIndex = 1;
@@ -73,7 +75,7 @@
             txtSourceFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtSourceFolder.Location = new System.Drawing.Point(85, 14);
             txtSourceFolder.Name = "txtSourceFolder";
-            txtSourceFolder.Size = new System.Drawing.Size(966, 31);
+            txtSourceFolder.Size = new System.Drawing.Size(834, 31);
             txtSourceFolder.TabIndex = 2;
             // 
             // txtDestinationFolder
@@ -81,7 +83,7 @@
             txtDestinationFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtDestinationFolder.Location = new System.Drawing.Point(85, 51);
             txtDestinationFolder.Name = "txtDestinationFolder";
-            txtDestinationFolder.Size = new System.Drawing.Size(966, 31);
+            txtDestinationFolder.Size = new System.Drawing.Size(834, 31);
             txtDestinationFolder.TabIndex = 3;
             // 
             // dataGridView
@@ -152,7 +154,7 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new System.Drawing.Point(153, 24);
+            textBox1.Location = new System.Drawing.Point(286, 21);
             textBox1.Name = "textBox1";
             textBox1.Size = new System.Drawing.Size(54, 31);
             textBox1.TabIndex = 9;
@@ -178,7 +180,7 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(10, 30);
+            label3.Location = new System.Drawing.Point(143, 27);
             label3.Name = "label3";
             label3.Size = new System.Drawing.Size(140, 25);
             label3.TabIndex = 12;
@@ -187,14 +189,16 @@
             // groupBox1
             // 
             groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            groupBox1.Controls.Add(textBox2);
+            groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(radioButton3);
             groupBox1.Controls.Add(radioButton2);
             groupBox1.Controls.Add(radioButton1);
             groupBox1.Controls.Add(textBox1);
             groupBox1.Controls.Add(label3);
-            groupBox1.Location = new System.Drawing.Point(1223, 12);
+            groupBox1.Location = new System.Drawing.Point(1091, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(552, 65);
+            groupBox1.Size = new System.Drawing.Size(684, 65);
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
             groupBox1.Text = "Filtros";
@@ -202,7 +206,7 @@
             // radioButton3
             // 
             radioButton3.AutoSize = true;
-            radioButton3.Location = new System.Drawing.Point(428, 24);
+            radioButton3.Location = new System.Drawing.Point(561, 21);
             radioButton3.Name = "radioButton3";
             radioButton3.Size = new System.Drawing.Size(113, 29);
             radioButton3.TabIndex = 15;
@@ -212,7 +216,7 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new System.Drawing.Point(304, 26);
+            radioButton2.Location = new System.Drawing.Point(437, 23);
             radioButton2.Name = "radioButton2";
             radioButton2.Size = new System.Drawing.Size(118, 29);
             radioButton2.TabIndex = 14;
@@ -223,13 +227,29 @@
             // 
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
-            radioButton1.Location = new System.Drawing.Point(213, 26);
+            radioButton1.Location = new System.Drawing.Point(346, 23);
             radioButton1.Name = "radioButton1";
             radioButton1.Size = new System.Drawing.Size(85, 29);
             radioButton1.TabIndex = 13;
             radioButton1.TabStop = true;
             radioButton1.Text = "Todos";
             radioButton1.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new System.Drawing.Point(62, 21);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new System.Drawing.Size(76, 31);
+            textBox2.TabIndex = 16;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(11, 27);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(45, 25);
+            label4.TabIndex = 17;
+            label4.Text = "Ano";
             // 
             // Form1
             // 
@@ -248,8 +268,8 @@
             Name = "Form1";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Rumo - Cópia de arquivos";
+            FormClosing += MainForm_FormClosing;
             Load += Form1_Load;
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
@@ -268,5 +288,7 @@
         private System.Windows.Forms.RadioButton radioButton2;
         private System.Windows.Forms.RadioButton radioButton1;
         private System.Windows.Forms.RadioButton radioButton3;
+        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.Label label4;
     }
 }

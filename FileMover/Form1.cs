@@ -201,105 +201,140 @@ namespace FileMoverApp
                                     }
 
                                     string[] pathFilePart = pathFile.Split('\\');
-                                    
-                                    string ano = "";
+
+                                    int posPathSource = txtSourceFolder.Text.Split('\\').Length;
+
+                                    string ano = pathFilePart[posPathSource];
                                     string sub = "";
 
                                     string subInternal = "";
                                     string km = "";
+
                                     string fileName = pathFilePart[pathFilePart.Length - 1];
 
-                                    for (int i = 0; i < pathFilePart.Length; i++)
+                                    if (string.IsNullOrEmpty(textBox2.Text) || textBox2.Text == ano)
                                     {
-                                        if (totPath < 0)
+                                        if (pathFilePart[posPathSource + 1].ToLower()
+                                            .StartsWith("sub", StringComparison.CurrentCultureIgnoreCase))
                                         {
-                                            break;
-                                        }
-
-                                        if (DateTime.TryParseExact(pathFilePart[i], "yyyy", null,
-                                                System.Globalization.DateTimeStyles.None, out DateTime _))
-                                        {
-                                            achouPathOk = true;
-
-                                            ano = pathFilePart[i];
-
-                                            int posSub = 0;
-
-                                            for (int j = i + 1; j < pathFilePart.Length - 1; j++)
+                                            for (int i = 0; i < pathFilePart.Length; i++)
                                             {
-                                                if (string.IsNullOrEmpty(sub) && pathFilePart[j].ToLower()
-                                                        .StartsWith("sub", StringComparison.CurrentCultureIgnoreCase))
-                                                {
-                                                    posSub = j;
-
-                                                    sub = pathFilePart[j];
-
-                                                    string numericPart = new string(sub.Where(char.IsDigit).ToArray());
-
-                                                    int number;
-
-                                                    if (int.TryParse(numericPart, out number))
-                                                    {
-                                                        string formattedSub = $"Sub {number:00}";
-
-                                                        sub = formattedSub;
-                                                    }
-                                                }
-
-                                                if (string.IsNullOrEmpty(km) && pathFilePart[j].ToLower()
-                                                        .StartsWith("km", StringComparison.CurrentCultureIgnoreCase))
-                                                {
-                                                    km = pathFilePart[j];
-
-                                                    break;
-                                                }
-                                            }
-
-                                            for (int j = posSub + 1; j < pathFilePart.Length - 1; j++)
-                                            {
-                                                if (!pathFilePart[j].StartsWith("km", StringComparison.CurrentCultureIgnoreCase))
-                                                {
-                                                    subInternal += "\\" + pathFilePart[j];
-                                                }
-                                            }
-
-                                            string fileNameDestination = txtDestinationFolder.Text + "\\" + sub + "\\" +
-                                                                         km +"\\" + ano + "\\Inspeções" + subInternal + "\\" +
-                                                                         fileName;
-
-                                            requiredSpaceInMB += new FileInfo(pathFile).Length / (double)(1024 * 1024);
-
-                                            string tamanhoFileSource = Math.Round(requiredSpaceInMB, 2) + " MB";
-
-                                            achou = File.Exists(fileNameDestination);
-
-                                            if ( (radioButton1.Checked) || (!achou && radioButton2.Checked) || (achou && radioButton3.Checked) )
-                                            {
-                                                if (sub != subAux)
-                                                {
-                                                    subAux = sub;
-
-                                                    totPath--;
-                                                }
-
                                                 if (totPath < 0)
                                                 {
                                                     break;
                                                 }
 
-                                                dataGridView.Rows.Add(pathFile,
-                                                    fileNameDestination,
-                                                    tamanhoFileSource);
+                                                if (DateTime.TryParseExact(pathFilePart[i], "yyyy", null,
+                                                        System.Globalization.DateTimeStyles.None, out DateTime _))
+                                                {
+                                                    achouPathOk = true;
 
-                                                DataGridViewRow row =
-                                                    dataGridView.Rows[
-                                                        dataGridView.Rows.Count - 1];
+                                                    ano = pathFilePart[i];
 
-                                                row.DefaultCellStyle.BackColor = achou
-                                                    ? Color.Green
-                                                    : Color.Tomato;
+                                                    int posSub = 0;
 
-                                                break;
+                                                    for (int j = i + 1; j < pathFilePart.Length - 1; j++)
+                                                    {
+                                                        if (string.IsNullOrEmpty(sub) && pathFilePart[j].ToLower()
+                                                                .StartsWith("sub",
+                                                                    StringComparison.CurrentCultureIgnoreCase))
+                                                        {
+                                                            posSub = j;
+
+                                                            sub = pathFilePart[j];
+
+                                                            string numericPart =
+                                                                new string(sub.Where(char.IsDigit).ToArray());
+
+                                                            int number;
+
+                                                            if (int.TryParse(numericPart, out number))
+                                                            {
+                                                                string formattedSub = $"Sub {number:00}";
+
+                                                                sub = formattedSub;
+                                                            }
+                                                        }
+
+                                                        if (string.IsNullOrEmpty(km) && pathFilePart[j].ToLower()
+                                                                .StartsWith("km",
+                                                                    StringComparison.CurrentCultureIgnoreCase))
+                                                        {
+                                                            km = pathFilePart[j];
+
+                                                            break;
+                                                        }
+                                                    }
+
+                                                    subInternal = "";
+
+                                                    for (int j = posSub + 1; j < pathFilePart.Length - 1; j++)
+                                                    {
+                                                        if (!pathFilePart[j].StartsWith("km",
+                                                                StringComparison.CurrentCultureIgnoreCase) &&
+                                                            !pathFilePart[j].Contains(ano) &&
+                                                            !pathFilePart[j].Contains("Inspeções")
+                                                           )
+                                                        {
+                                                            subInternal += "\\" + pathFilePart[j];
+                                                        }
+                                                    }
+
+                                                    string subInternalAjuste = "\\" + ano + "\\Inspeções";
+
+                                                    if (string.IsNullOrEmpty(subInternal))
+                                                    {
+                                                        subInternal = subInternalAjuste;
+                                                    }
+                                                    else if (subInternal != subInternalAjuste)
+                                                    {
+                                                        subInternal = subInternalAjuste + subInternal;
+                                                    }
+
+                                                    string fileNameDestination =
+                                                        txtDestinationFolder.Text + "\\" + sub + "\\" +
+                                                        km + subInternal + "\\" +
+                                                        fileName;
+
+                                                    double tamanhoMB = new FileInfo(pathFile).Length /
+                                                                       (double)(1024 * 1024);
+
+                                                    requiredSpaceInMB += tamanhoMB;
+
+                                                    string tamanhoFileSource = Math.Round(tamanhoMB, 2) + " MB";
+
+                                                    achou = File.Exists(fileNameDestination);
+
+                                                    if ((radioButton1.Checked) || (!achou && radioButton2.Checked) ||
+                                                        (achou && radioButton3.Checked))
+                                                    {
+                                                        if (sub != subAux)
+                                                        {
+                                                            subAux = sub;
+
+                                                            totPath--;
+                                                        }
+
+                                                        if (totPath < 0)
+                                                        {
+                                                            break;
+                                                        }
+
+                                                        dataGridView.Rows.Add(pathFile,
+                                                            fileNameDestination,
+                                                            tamanhoFileSource);
+
+                                                        DataGridViewRow row =
+                                                            dataGridView.Rows[
+                                                                dataGridView.Rows.Count - 1];
+
+                                                        row.DefaultCellStyle.BackColor = achou
+                                                            ? Color.Green
+                                                            : Color.Tomato;
+                                                    }
+
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
