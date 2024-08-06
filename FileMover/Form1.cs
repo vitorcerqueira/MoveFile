@@ -153,6 +153,7 @@ namespace FileMoverApp
         {
             Invoke(new Action(() =>
             {
+                requiredSpaceInMB = 0;
 
                 //string[] files = Directory.GetFiles(txtSourceFolder.Text);
 
@@ -433,7 +434,7 @@ namespace FileMoverApp
             }
             else
             {
-                MessageBox.Show("Não há espaço suficiente disponível! Requerido: " + requiredSpaceInMB.ToString() + " MB Livre: " + availableFreeSpace.ToString() + " MB", "Atenção", MessageBoxButtons.OK,
+                MessageBox.Show("Não há espaço suficiente disponível em " + drive.Name + " \n \n Requerido: " + requiredSpaceInMB.ToString("F2") + " MB \n \n Livre : "+ availableFreeSpace.ToString("F2") + " MB", "Atenção", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
