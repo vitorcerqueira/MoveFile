@@ -39,11 +39,11 @@
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            textBox2 = new System.Windows.Forms.TextBox();
+            label4 = new System.Windows.Forms.Label();
             radioButton3 = new System.Windows.Forms.RadioButton();
             radioButton2 = new System.Windows.Forms.RadioButton();
             radioButton1 = new System.Windows.Forms.RadioButton();
-            textBox2 = new System.Windows.Forms.TextBox();
-            label4 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)dataGridView).BeginInit();
             groupBox1.SuspendLayout();
             SuspendLayout();
@@ -51,7 +51,7 @@
             // btnSelectSource
             // 
             btnSelectSource.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnSelectSource.Location = new System.Drawing.Point(925, 14);
+            btnSelectSource.Location = new System.Drawing.Point(1170, 14);
             btnSelectSource.Name = "btnSelectSource";
             btnSelectSource.Size = new System.Drawing.Size(160, 31);
             btnSelectSource.TabIndex = 0;
@@ -62,7 +62,7 @@
             // btnSelectDestination
             // 
             btnSelectDestination.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnSelectDestination.Location = new System.Drawing.Point(925, 50);
+            btnSelectDestination.Location = new System.Drawing.Point(1170, 50);
             btnSelectDestination.Name = "btnSelectDestination";
             btnSelectDestination.Size = new System.Drawing.Size(160, 32);
             btnSelectDestination.TabIndex = 1;
@@ -75,7 +75,7 @@
             txtSourceFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtSourceFolder.Location = new System.Drawing.Point(85, 14);
             txtSourceFolder.Name = "txtSourceFolder";
-            txtSourceFolder.Size = new System.Drawing.Size(834, 31);
+            txtSourceFolder.Size = new System.Drawing.Size(1079, 31);
             txtSourceFolder.TabIndex = 2;
             // 
             // txtDestinationFolder
@@ -83,7 +83,7 @@
             txtDestinationFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtDestinationFolder.Location = new System.Drawing.Point(85, 51);
             txtDestinationFolder.Name = "txtDestinationFolder";
-            txtDestinationFolder.Size = new System.Drawing.Size(834, 31);
+            txtDestinationFolder.Size = new System.Drawing.Size(1079, 31);
             txtDestinationFolder.TabIndex = 3;
             // 
             // dataGridView
@@ -97,7 +97,7 @@
             dataGridView.Location = new System.Drawing.Point(12, 88);
             dataGridView.Name = "dataGridView";
             dataGridView.RowHeadersWidth = 62;
-            dataGridView.Size = new System.Drawing.Size(1763, 636);
+            dataGridView.Size = new System.Drawing.Size(2008, 636);
             dataGridView.TabIndex = 4;
             // 
             // Origem
@@ -149,7 +149,7 @@
             progressBar.Anchor = System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             progressBar.Location = new System.Drawing.Point(239, 730);
             progressBar.Name = "progressBar";
-            progressBar.Size = new System.Drawing.Size(1536, 34);
+            progressBar.Size = new System.Drawing.Size(1781, 34);
             progressBar.TabIndex = 7;
             // 
             // textBox1
@@ -196,12 +196,28 @@
             groupBox1.Controls.Add(radioButton1);
             groupBox1.Controls.Add(textBox1);
             groupBox1.Controls.Add(label3);
-            groupBox1.Location = new System.Drawing.Point(1091, 12);
+            groupBox1.Location = new System.Drawing.Point(1336, 12);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new System.Drawing.Size(684, 65);
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
             groupBox1.Text = "Filtros";
+            // 
+            // textBox2
+            // 
+            textBox2.Location = new System.Drawing.Point(62, 21);
+            textBox2.Name = "textBox2";
+            textBox2.Size = new System.Drawing.Size(76, 31);
+            textBox2.TabIndex = 16;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new System.Drawing.Point(11, 27);
+            label4.Name = "label4";
+            label4.Size = new System.Drawing.Size(45, 25);
+            label4.TabIndex = 17;
+            label4.Text = "Ano";
             // 
             // radioButton3
             // 
@@ -235,25 +251,9 @@
             radioButton1.Text = "Todos";
             radioButton1.UseVisualStyleBackColor = true;
             // 
-            // textBox2
-            // 
-            textBox2.Location = new System.Drawing.Point(62, 21);
-            textBox2.Name = "textBox2";
-            textBox2.Size = new System.Drawing.Size(76, 31);
-            textBox2.TabIndex = 16;
-            // 
-            // label4
-            // 
-            label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(11, 27);
-            label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(45, 25);
-            label4.TabIndex = 17;
-            label4.Text = "Ano";
-            // 
             // Form1
             // 
-            ClientSize = new System.Drawing.Size(1787, 784);
+            ClientSize = new System.Drawing.Size(2032, 784);
             Controls.Add(groupBox1);
             Controls.Add(label2);
             Controls.Add(label1);
@@ -268,6 +268,7 @@
             Name = "Form1";
             StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             Text = "Rumo - Cópia de arquivos";
+            WindowState = System.Windows.Forms.FormWindowState.Maximized;
             FormClosing += MainForm_FormClosing;
             Load += Form1_Load;
             ((System.ComponentModel.ISupportInitialize)dataGridView).EndInit();
