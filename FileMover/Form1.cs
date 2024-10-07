@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Immutable;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Windows.Forms;
 using System.Xml.Linq;
@@ -160,9 +162,9 @@ namespace FileMoverApp
                 // ORIGEM : C:\Delvined\Inspeção de Pontes\Métrica\                                         -> 2023\Sub1\Km 219+300 pt
                 // DESTINO: C:\Rumo\Infraestrutura e OAEs - 10. ENGENHARIA\7-Cadastro e Gestão de Ativos\   -> Sub 01\Km 219+300 pt
 
-                string[] files = Directory.GetFiles(@txtSourceFolder.Text)
-                    .Where(file => !IsFileHidden(file))
-                    .ToArray();
+                //string[] files = Directory.GetFiles(@txtSourceFolder.Text)
+                //    .Where(file => !IsFileHidden(file))
+                //    .ToArray();
 
                 string[] pathsSource = Directory.GetDirectories(@txtSourceFolder.Text);
 
@@ -190,11 +192,12 @@ namespace FileMoverApp
                             string[] pathFileSource =
                                 Directory.GetFiles(pathSource, "*.*", SearchOption.AllDirectories);
 
-                            Array.Sort(pathFileSource);
+                            var pathFileSourceOrdenado = pathFileSource
+                            .OrderBy(c => string.Join("\\", c.Split('\\').Skip(1))).ToList(); // Pula o diretório raiz e ordena pelos subdiretórios
 
-                            if (pathFileSource.Length > 0)
+                            if (pathFileSourceOrdenado.Count > 0)
                             {
-                                foreach (string pathFile in pathFileSource)
+                                foreach (string pathFile in pathFileSourceOrdenado)
                                 {
                                     if (totPath < 0)
                                     {
@@ -213,7 +216,7 @@ namespace FileMoverApp
 
                                     string fileName = pathFilePart[pathFilePart.Length - 1];
 
-                                    if (string.IsNullOrEmpty(textBox2.Text) || textBox2.Text == ano)
+                                    if (string.IsNullOrEmpty(textBox2.Text) || ano.Contains(textBox2.Text))
                                     {
                                         if (pathFilePart[posPathSource + 1].ToLower()
                                             .StartsWith("sub", StringComparison.CurrentCultureIgnoreCase))
@@ -223,14 +226,24 @@ namespace FileMoverApp
                                                 if (totPath < 0)
                                                 {
                                                     break;
+
                                                 }
 
-                                                if (DateTime.TryParseExact(pathFilePart[i], "yyyy", null,
-                                                        System.Globalization.DateTimeStyles.None, out DateTime _))
+                                                string namePath = pathFilePart[i];
+
+                                                Match match = Regex.Match(namePath, @"\b\d{4}\b");
+
+                                                if (match.Success)
+                                                {
+                                                    namePath = match.Value;
+                                                }
+
+                                                if (DateTime.TryParseExact(namePath, "yyyy", null,
+                                                    System.Globalization.DateTimeStyles.None, out DateTime _))
                                                 {
                                                     achouPathOk = true;
 
-                                                    ano = pathFilePart[i];
+                                                    ano = namePath;
 
                                                     int posSub = 0;
 
@@ -300,7 +313,7 @@ namespace FileMoverApp
                                                     double tamanhoMB = new FileInfo(pathFile).Length /
                                                                        (double)(1024 * 1024);
 
-                                                    requiredSpaceInMB += tamanhoMB;
+                                                    //requiredSpaceInMB += tamanhoMB;
 
                                                     string tamanhoFileSource = Math.Round(tamanhoMB, 2) + " MB";
 
@@ -320,6 +333,8 @@ namespace FileMoverApp
                                                         {
                                                             break;
                                                         }
+
+                                                        requiredSpaceInMB += tamanhoMB;
 
                                                         dataGridView.Rows.Add(pathFile,
                                                             fileNameDestination,
@@ -386,6 +401,10 @@ namespace FileMoverApp
 
                     Boolean achou = false;
 
+                    var writer = new StreamWriter(@$"c:\temp\Relatorio_FileMover_{DateTime.Now.ToString("yyyyMMdd_HHmmss")}.txt");
+
+                    string auxPath = "";
+
                     foreach (DataGridViewRow row in dataGridView.Rows)
                     {
                         string sourceFile = row.Cells[0].Value.ToString();
@@ -403,6 +422,19 @@ namespace FileMoverApp
                                 }
 
                                 File.Copy(sourceFile, destFile, true);
+
+                                string path = GetPathUntil2(sourceFile, "sub");
+
+                                if (auxPath != path)
+                                {
+                                    auxPath = path;
+
+                                    writer.WriteLine(path);
+                                }
+
+                                string km = GetPathUntil(sourceFile, "km");
+
+                                writer.WriteLine(km.PadLeft(5));
 
                                 achou = true;
 
@@ -422,6 +454,8 @@ namespace FileMoverApp
 
                     if (achou)
                     {
+                        writer.Close();
+
                         MessageBox.Show("Arquivos movidos com sucesso!", "Atenção", MessageBoxButtons.OK,
                             MessageBoxIcon.Exclamation);
                     }
@@ -434,7 +468,7 @@ namespace FileMoverApp
             }
             else
             {
-                MessageBox.Show("Não há espaço suficiente disponível em " + drive.Name + " \n \n Requerido: " + requiredSpaceInMB.ToString("F2") + " MB \n \n Livre : "+ availableFreeSpace.ToString("F2") + " MB", "Atenção", MessageBoxButtons.OK,
+                MessageBox.Show("Não há espaço suficiente disponível em " + drive.Name + " \n \n Requerido: " + requiredSpaceInMB.ToString("F2") + " MB \n \n Livre : " + availableFreeSpace.ToString("F2") + " MB", "Atenção", MessageBoxButtons.OK,
                     MessageBoxIcon.Error);
             }
         }
@@ -442,6 +476,39 @@ namespace FileMoverApp
         {
             FileAttributes attributes = File.GetAttributes(filePath);
             return (attributes & FileAttributes.Hidden) == FileAttributes.Hidden;
+        }
+
+        static string GetPathUntil(string path, string find)
+        {
+            string[] list = path.Split("\\");
+
+            for (int i = 0; i < list.Length; i++) 
+            {
+                if (list[i].ToUpper().StartsWith(find.ToUpper()))
+                {
+                    return list[i];
+                }
+            }
+
+            return "";
+        }
+
+        static string GetPathUntil2(string path, string find)
+        {
+            string[] list = path.Split("\\");
+            string aux = "";
+
+            for (int i = 0; i < list.Length; i++)
+            {
+                aux += list[i] + "\\";
+
+                if (list[i].ToUpper().StartsWith(find.ToUpper()))
+                {
+                    return aux;
+                }
+            }
+
+            return "";
         }
 
         private void Form1_Load(object sender, EventArgs e)
