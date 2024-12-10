@@ -39,6 +39,8 @@
             label2 = new System.Windows.Forms.Label();
             label3 = new System.Windows.Forms.Label();
             groupBox1 = new System.Windows.Forms.GroupBox();
+            textBox3 = new System.Windows.Forms.TextBox();
+            label5 = new System.Windows.Forms.Label();
             textBox2 = new System.Windows.Forms.TextBox();
             label4 = new System.Windows.Forms.Label();
             radioButton3 = new System.Windows.Forms.RadioButton();
@@ -51,7 +53,7 @@
             // btnSelectSource
             // 
             btnSelectSource.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnSelectSource.Location = new System.Drawing.Point(1170, 14);
+            btnSelectSource.Location = new System.Drawing.Point(1002, 6);
             btnSelectSource.Name = "btnSelectSource";
             btnSelectSource.Size = new System.Drawing.Size(160, 31);
             btnSelectSource.TabIndex = 0;
@@ -62,7 +64,7 @@
             // btnSelectDestination
             // 
             btnSelectDestination.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
-            btnSelectDestination.Location = new System.Drawing.Point(1170, 50);
+            btnSelectDestination.Location = new System.Drawing.Point(1002, 42);
             btnSelectDestination.Name = "btnSelectDestination";
             btnSelectDestination.Size = new System.Drawing.Size(160, 32);
             btnSelectDestination.TabIndex = 1;
@@ -75,7 +77,7 @@
             txtSourceFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtSourceFolder.Location = new System.Drawing.Point(85, 14);
             txtSourceFolder.Name = "txtSourceFolder";
-            txtSourceFolder.Size = new System.Drawing.Size(1079, 31);
+            txtSourceFolder.Size = new System.Drawing.Size(911, 23);
             txtSourceFolder.TabIndex = 2;
             // 
             // txtDestinationFolder
@@ -83,7 +85,7 @@
             txtDestinationFolder.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right;
             txtDestinationFolder.Location = new System.Drawing.Point(85, 51);
             txtDestinationFolder.Name = "txtDestinationFolder";
-            txtDestinationFolder.Size = new System.Drawing.Size(1079, 31);
+            txtDestinationFolder.Size = new System.Drawing.Size(911, 23);
             txtDestinationFolder.TabIndex = 3;
             // 
             // dataGridView
@@ -106,21 +108,21 @@
             Origem.HeaderText = "Source";
             Origem.MinimumWidth = 8;
             Origem.Name = "Origem";
-            Origem.Width = 102;
+            Origem.Width = 68;
             // 
             // Destino
             // 
             Destino.HeaderText = "Destination";
             Destino.MinimumWidth = 8;
             Destino.Name = "Destino";
-            Destino.Width = 138;
+            Destino.Width = 92;
             // 
             // Size
             // 
             Size.HeaderText = "Size";
             Size.MinimumWidth = 8;
             Size.Name = "Size";
-            Size.Width = 79;
+            Size.Width = 52;
             // 
             // btnLoadGrid
             // 
@@ -154,9 +156,9 @@
             // 
             // textBox1
             // 
-            textBox1.Location = new System.Drawing.Point(286, 21);
+            textBox1.Location = new System.Drawing.Point(241, 22);
             textBox1.Name = "textBox1";
-            textBox1.Size = new System.Drawing.Size(54, 31);
+            textBox1.Size = new System.Drawing.Size(79, 23);
             textBox1.TabIndex = 9;
             // 
             // label1
@@ -164,7 +166,7 @@
             label1.AutoSize = true;
             label1.Location = new System.Drawing.Point(12, 22);
             label1.Name = "label1";
-            label1.Size = new System.Drawing.Size(72, 25);
+            label1.Size = new System.Drawing.Size(47, 15);
             label1.TabIndex = 10;
             label1.Text = "Origem";
             // 
@@ -173,22 +175,24 @@
             label2.AutoSize = true;
             label2.Location = new System.Drawing.Point(12, 59);
             label2.Name = "label2";
-            label2.Size = new System.Drawing.Size(73, 25);
+            label2.Size = new System.Drawing.Size(47, 15);
             label2.TabIndex = 11;
             label2.Text = "Destino";
             // 
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new System.Drawing.Point(143, 27);
+            label3.Location = new System.Drawing.Point(143, 26);
             label3.Name = "label3";
-            label3.Size = new System.Drawing.Size(140, 25);
+            label3.Size = new System.Drawing.Size(92, 15);
             label3.TabIndex = 12;
             label3.Text = "Limite de pastas";
             // 
             // groupBox1
             // 
             groupBox1.Anchor = System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right;
+            groupBox1.Controls.Add(textBox3);
+            groupBox1.Controls.Add(label5);
             groupBox1.Controls.Add(textBox2);
             groupBox1.Controls.Add(label4);
             groupBox1.Controls.Add(radioButton3);
@@ -196,35 +200,51 @@
             groupBox1.Controls.Add(radioButton1);
             groupBox1.Controls.Add(textBox1);
             groupBox1.Controls.Add(label3);
-            groupBox1.Location = new System.Drawing.Point(1336, 12);
+            groupBox1.Location = new System.Drawing.Point(1168, 12);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new System.Drawing.Size(684, 65);
+            groupBox1.Size = new System.Drawing.Size(852, 65);
             groupBox1.TabIndex = 13;
             groupBox1.TabStop = false;
             groupBox1.Text = "Filtros";
             // 
+            // textBox3
+            // 
+            textBox3.Location = new System.Drawing.Point(436, 22);
+            textBox3.Name = "textBox3";
+            textBox3.Size = new System.Drawing.Size(98, 23);
+            textBox3.TabIndex = 18;
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new System.Drawing.Point(326, 26);
+            label5.Name = "label5";
+            label5.Size = new System.Drawing.Size(104, 15);
+            label5.TabIndex = 19;
+            label5.Text = "Limite de arquivos";
+            // 
             // textBox2
             // 
-            textBox2.Location = new System.Drawing.Point(62, 21);
+            textBox2.Location = new System.Drawing.Point(62, 22);
             textBox2.Name = "textBox2";
-            textBox2.Size = new System.Drawing.Size(76, 31);
+            textBox2.Size = new System.Drawing.Size(76, 23);
             textBox2.TabIndex = 16;
             // 
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new System.Drawing.Point(11, 27);
+            label4.Location = new System.Drawing.Point(11, 26);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(45, 25);
+            label4.Size = new System.Drawing.Size(29, 15);
             label4.TabIndex = 17;
             label4.Text = "Ano";
             // 
             // radioButton3
             // 
             radioButton3.AutoSize = true;
-            radioButton3.Location = new System.Drawing.Point(561, 21);
+            radioButton3.Location = new System.Drawing.Point(751, 24);
             radioButton3.Name = "radioButton3";
-            radioButton3.Size = new System.Drawing.Size(113, 29);
+            radioButton3.Size = new System.Drawing.Size(75, 19);
             radioButton3.TabIndex = 15;
             radioButton3.Text = "Copiados";
             radioButton3.UseVisualStyleBackColor = true;
@@ -232,9 +252,9 @@
             // radioButton2
             // 
             radioButton2.AutoSize = true;
-            radioButton2.Location = new System.Drawing.Point(437, 23);
+            radioButton2.Location = new System.Drawing.Point(643, 24);
             radioButton2.Name = "radioButton2";
-            radioButton2.Size = new System.Drawing.Size(118, 29);
+            radioButton2.Size = new System.Drawing.Size(80, 19);
             radioButton2.TabIndex = 14;
             radioButton2.Text = "Pendentes";
             radioButton2.UseVisualStyleBackColor = true;
@@ -243,9 +263,9 @@
             // 
             radioButton1.AutoSize = true;
             radioButton1.Checked = true;
-            radioButton1.Location = new System.Drawing.Point(346, 23);
+            radioButton1.Location = new System.Drawing.Point(556, 24);
             radioButton1.Name = "radioButton1";
-            radioButton1.Size = new System.Drawing.Size(85, 29);
+            radioButton1.Size = new System.Drawing.Size(56, 19);
             radioButton1.TabIndex = 13;
             radioButton1.TabStop = true;
             radioButton1.Text = "Todos";
@@ -291,5 +311,7 @@
         private System.Windows.Forms.RadioButton radioButton3;
         private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBox3;
+        private System.Windows.Forms.Label label5;
     }
 }

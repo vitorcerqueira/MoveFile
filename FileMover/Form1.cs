@@ -178,6 +178,10 @@ namespace FileMoverApp
 
                 int totPath = textBox1.Text.Where(char.IsDigit).Any() ? int.Parse(textBox1.Text) : 0;
 
+                int totFilesToProcess = textBox3.Text.Any() ? int.Parse(textBox3.Text) : 0;
+
+                int totFilesCount = 0;
+
                 if (totPath > 0)
                 {
                     if (pathsSource.Length > 0)
@@ -199,7 +203,14 @@ namespace FileMoverApp
                             {
                                 foreach (string pathFile in pathFileSourceOrdenado)
                                 {
+                                    totFilesCount++;
+
                                     if (totPath < 0)
+                                    {
+                                        break;
+                                    }
+
+                                    if (totFilesToProcess > 0 && totFilesCount > totFilesToProcess)
                                     {
                                         break;
                                     }
